@@ -3,9 +3,9 @@ export default class Point {
 
   public y: number=0;
 
-  constructor(s: { x: number, y: number }) {
-    Object.assign(this, s);
+  constructor({ x = 0, y = 0 } = {}) {
+    Object.assign(this, { x, y });
   }
 
-  public static point0 = new Point({ x: 0, y: 0 });
+  public static ZERO = new Point({ x: 0, y: 0 });
 }

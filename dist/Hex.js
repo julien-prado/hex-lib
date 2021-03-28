@@ -1,19 +1,14 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-class Hex {
-    constructor(s) {
-        this.q = 0;
-        this.r = 0;
-        this.s = 0;
-        if (Math.round(s.q + s.r + s.s) !== 0)
+export default class Hex {
+    constructor({ q = 0, r = 0, s = -q - r } = {}) {
+        if (Math.round(q + r + s) !== 0)
             throw new Error('q + r + s must be 0');
-        Object.assign(this, s);
+        Object.assign(this, { q, r, s });
     }
-    add(b) {
-        return new Hex({ q: this.q + b.q, r: this.r + b.r, s: this.s + b.s });
+    add({ q = 0, r = 0, s = 0 } = {}) {
+        return new Hex({ q: this.q + q, r: this.r + r, s: this.s + s });
     }
-    subtract(b) {
-        return new Hex({ q: this.q - b.q, r: this.r - b.r, s: this.s - b.s });
+    subtract({ q = 0, r = 0, s = 0 } = {}) {
+        return new Hex({ q: this.q - q, r: this.r - r, s: this.s - s });
     }
     scale(k) {
         return new Hex({ q: this.q * k, r: this.r * k, s: this.s * k });
@@ -36,8 +31,8 @@ class Hex {
     len() {
         return (Math.abs(this.q) + Math.abs(this.r) + Math.abs(this.s)) / 2;
     }
-    distance(b) {
-        return this.subtract(b).len();
+    distance({ q = 0, r = 0, s = 0 } = {}) {
+        return this.subtract({ q, r, s }).len();
     }
     round() {
         let q = Math.round(this.q);
@@ -57,17 +52,17 @@ class Hex {
         }
         return new Hex({ q, r, s });
     }
-    lerp(b, t) {
+    lerp({ q = 0, r = 0, s = 0 } = {}, t) {
         return new Hex({
-            q: this.q * (1.0 - t) + b.q * t,
-            r: this.r * (1.0 - t) + b.r * t,
-            s: this.s * (1.0 - t) + b.s * t,
+            q: this.q * (1.0 - t) + q * t,
+            r: this.r * (1.0 - t) + r * t,
+            s: this.s * (1.0 - t) + s * t,
         });
     }
-    linedraw(b) {
-        const N = this.distance(b);
+    linedraw({ q = 0, r = 0, s = 0 } = {}) {
+        const N = this.distance({ q, r, s });
         const aNudge = new Hex({ q: this.q + 1e-06, r: this.r + 1e-06, s: this.s - 2e-06 });
-        const bNudge = new Hex({ q: b.q + 1e-06, r: b.r + 1e-06, s: b.s - 2e-06 });
+        const bNudge = new Hex({ q: q + 1e-06, r: r + 1e-06, s: s - 2e-06 });
         const results = [];
         const step = 1.0 / Math.max(N, 1);
         for (let i = 0; i <= N; i += 1) {
@@ -76,7 +71,6 @@ class Hex {
         return results;
     }
 }
-exports.default = Hex;
 Hex.directions = [
     new Hex({ q: 1, r: 0, s: -1 }),
     new Hex({ q: 1, r: -1, s: 0 }),
@@ -93,4 +87,4 @@ Hex.diagonals = [
     new Hex({ q: -1, r: 2, s: -1 }),
     new Hex({ q: 1, r: 1, s: -2 }),
 ];
-Hex.hex0 = new Hex({ q: 0, r: 0, s: 0 });
+Hex.ZERO = new Hex();

@@ -5,13 +5,13 @@ export default class DoubledCoord {
 
   public row: number=0;
 
-  constructor(s: { col: number, row: number }) {
-    Object.assign(this, s);
+  constructor({ col = 0, row = 0 } = {}) {
+    Object.assign(this, { col, row });
   }
 
-  public static qdoubledFromCube(h: Hex): DoubledCoord {
-    const col: number = h.q;
-    const row: number = 2 * h.r + h.q;
+  public static qdoubledFromCube({ q = 0, r = 0 } = {}): DoubledCoord {
+    const col: number = q;
+    const row: number = 2 * r + q;
     return new DoubledCoord({ col, row });
   }
 
@@ -22,9 +22,9 @@ export default class DoubledCoord {
     return new Hex({ q, r, s });
   }
 
-  public static rdoubledFromCube(h: Hex): DoubledCoord {
-    const col: number = 2 * h.q + h.r;
-    const row: number = h.r;
+  public static rdoubledFromCube({ q = 0, r = 0 } = {}): DoubledCoord {
+    const col: number = 2 * q + r;
+    const row: number = r;
     return new DoubledCoord({ col, row });
   }
 

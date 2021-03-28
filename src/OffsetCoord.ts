@@ -5,27 +5,26 @@ export default class OffsetCoord {
 
   public row: number=0;
 
-  constructor(s: { col: number, row: number }) {
-    Object.assign(this, s);
+  constructor({ col = 0, row = 0 } = {}) {
+    Object.assign(this, { col, row });
   }
 
   public static EVEN: number = 1;
 
   public static ODD: number = -1;
 
-  public static qoffsetFromCube(offset: number, h: Hex): OffsetCoord {
-    const col: number = h.q;
-    const row: number = h.r + (h.q + offset * (h.q || 1)) / 2;
+  public static qoffsetFromCube(offset: number, { q = 0, r = 0 } = {}): OffsetCoord {
+    const col: number = q;
+    const row: number = r + (q + offset * (q || 1)) / 2;
     if (offset !== OffsetCoord.EVEN && offset !== OffsetCoord.ODD) {
       throw new Error('offset must be EVEN (+1) or ODD (-1)');
     }
     return new OffsetCoord({ col, row });
   }
 
-
-  public static qoffsetToCube(offset: number, h: OffsetCoord): Hex {
-    const q: number = h.col;
-    const r: number = h.row - (h.col + offset * (h.col || 1)) / 2;
+  public static qoffsetToCube(offset: number, { col = 0, row = 0 } = {}): Hex {
+    const q: number = col;
+    const r: number = row - (col + offset * (col || 1)) / 2;
     const s: number = -q - r;
     if (offset !== OffsetCoord.EVEN && offset !== OffsetCoord.ODD) {
       throw new Error('offset must be EVEN (+1) or ODD (-1)');
@@ -33,20 +32,18 @@ export default class OffsetCoord {
     return new Hex({ q, r, s });
   }
 
-
-  public static roffsetFromCube(offset: number, h: Hex): OffsetCoord {
-    const col: number = h.q + (h.r + offset * (h.r || 1)) / 2;
-    const row: number = h.r;
+  public static roffsetFromCube(offset: number, { q = 0, r = 0 } = {}): OffsetCoord {
+    const col: number = q + (r + offset * (r || 1)) / 2;
+    const row: number = r;
     if (offset !== OffsetCoord.EVEN && offset !== OffsetCoord.ODD) {
       throw new Error('offset must be EVEN (+1) or ODD (-1)');
     }
     return new OffsetCoord({ col, row });
   }
 
-
-  public static roffsetToCube(offset: number, h: OffsetCoord): Hex {
-    const q: number = h.col - (h.row + offset * (h.row || 1)) / 2;
-    const r: number = h.row;
+  public static roffsetToCube(offset: number, { col = 0, row = 0 } = {}): Hex {
+    const q: number = col - (row + offset * (row || 1)) / 2;
+    const r: number = row;
     const s: number = -q - r;
     if (offset !== OffsetCoord.EVEN && offset !== OffsetCoord.ODD) {
       throw new Error('offset must be EVEN (+1) or ODD (-1)');
